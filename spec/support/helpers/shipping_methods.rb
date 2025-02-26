@@ -4,6 +4,7 @@ module SolidusEasypost
       def create_easypost_shipping_methods
         [
           %w[USPS Express],
+          %w[USPS GroundAdvantage],
           %w[USPS First],
           %w[USPS ParcelSelect],
           %w[USPS Priority],
