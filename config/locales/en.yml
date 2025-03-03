@@ -6,3 +6,15 @@ en:
       postage_labels:
         show:
           no_postage_label: 'No postage label available for shipment %{shipment_number}.'
+    product_type: "Product Type"
+    default_stock_location: "Default Location"
+    return_stock_location: "Return Location"
+    service_stock_location: "Service Location"
+    product_types:
+      standard: "Standard Product"
+      service: "Service"
+      trade_in: "Trade-In"
+    admin:
+      form:
+        product:
+          select_stock_location: "Select Stock Location"
