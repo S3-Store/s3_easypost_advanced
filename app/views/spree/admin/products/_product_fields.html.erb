@@ -1,0 +1,20 @@
+<div data-hook="admin_product_form_additional_fields">
+  <div class="form-group">
+    <%= f.label :product_type, t('spree.product_type') %>
+    <%= f.select :product_type,
+                 Spree::Product.product_types.keys.map { |k| [t("spree.product_types.#{k}"), k] },
+                 { include_blank: t('spree.admin.form.product.select_product_type') },
+                 class: 'form-control' %>
+  </div>
+  <% [:default, :return, :service].each do |location_type| %>
+    <div class="form-group">
+      <%= f.label :"#{location_type}_stock_location_id", t("spree.#{location_type}_stock_location") %>
+      <%= f.collection_select :"#{location_type}_stock_location_id",
+                            Spree::StockLocation.all,
+                            :id,
+                            :name,
+                            { include_blank: t('spree.none') },
+                            class: 'form-control' %>
+    </div>
+  <% end %>
+</div>
