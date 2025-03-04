@@ -1,6 +1,7 @@
 en:
   spree:
     postage_label: 'Postage Label'
+    download_shipping_label: 'Download your Shipping Label'
     open_postage_label: 'Open'
     admin:
       postage_labels:

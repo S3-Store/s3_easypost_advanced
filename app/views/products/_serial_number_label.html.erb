@@ -1,0 +1,5 @@
+<% if product.requires_identifier %>
+  <%= label_tag :customer_metadata_value, "Serial Number or IMEI" %>
+  <p>Note: If you want the shipment to be insured, please provide a Serial Number or IMEI for your product.</p>
+  <%= text_field_tag "customer_metadata[user_serial_number]", nil, placeholder: "Enter IMEI", class: 'min-w-[200px] mb-5' %>
+<% end %>

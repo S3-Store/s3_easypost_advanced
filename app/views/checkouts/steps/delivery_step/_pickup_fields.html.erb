@@ -1,0 +1,50 @@
+<% if form.object.shipping_methods.any?(&:schedule_pickup) %>
+<div class="pickup-fields mt-6">
+  <%= form.fields_for :customer_metadata, @order.customer_metadata || {} do |meta| %>
+    <%
+      # Calculate days and default day
+      days_options = (1..14).each_with_object([]) do |i, days|
+        date = (Date.current + 1) + i.days
+        next if date.saturday? || date.sunday?
+        days << [date.strftime("%A, %B %d"), date.iso8601] if days.count < 5
+      end.compact
+      default_day = days_options.first&.second
+    %>
+
+    <div class="field">
+      <%= meta.label :pickup_day, 'Pickup Day*', class: "block font-medium mb-1" %>
+      <%= meta.select :pickup_day,
+            options_for_select(
+              days_options,
+              @order.customer_metadata['pickup_day'] || default_day
+            ),
+            { required: true },
+            class: "w-full p-2 border rounded",
+            data: { pickup_field: true } %>
+      <small class="text-gray-500 block mt-1">Next 5 business days</small>
+    </div>
+
+    <%
+      # Calculate times and default time
+      time_options = (9..20).step(3).each_with_object([]) do |h, times|
+        next if h + 3 > 20
+        times << ["#{h}:00 - #{h+3}:00", "#{h}:00-#{h+3}:00"]
+      end
+      default_time = time_options.first&.second
+    %>
+
+    <div class="field mt-4">
+      <%= meta.label :pickup_time, 'Pickup Time*', class: "block font-medium mb-1" %>
+      <%= meta.select :pickup_time,
+            options_for_select(
+              time_options,
+              @order.customer_metadata['pickup_time'] || default_time
+            ),
+            { required: true },
+            class: "w-full p-2 border rounded",
+            data: { pickup_field: true } %>
+      <small class="text-gray-500 block mt-1">Available time slots</small>
+    </div>
+  <% end %>
+</div>
+<% end %>
