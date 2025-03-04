@@ -1,0 +1,7 @@
+<%= f.field_container :schedule_pickup, class: %w(checkbox) do %>
+  <label>
+    <%= f.check_box(:schedule_pickup) %>
+    <%= Spree::ShippingMethod.human_attribute_name :schedule_pickup %>
+  </label>
+  <%= error_message_on :shipping_method, :schedule_pickup %>
+<% end %>
