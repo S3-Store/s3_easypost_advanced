@@ -18,6 +18,8 @@ module SolidusEasypost
 
       def add_javascripts
         empty_directory 'app/assets/javascripts'
+        template 'po_number_toggle.js', 'app/assets/javascripts/po_number_toggle.js'
+        append_file 'app/assets/javascripts/solidus_starter_frontend.js', "//= require po_number_toggle\n"
       end
 
       def add_shipping_info
@@ -32,6 +34,9 @@ module SolidusEasypost
         insert_into_file "app/views/checkouts/steps/delivery_step/_shipping_methods.html.erb",
           "\n<%= render 'checkouts/steps/delivery_step/pickup_fields', form: form %>",
           after: "</ul>"
+        insert_into_file "app/views/checkouts/steps/address_step/_address_inputs.html.erb",
+          "\n    <%= render 'checkouts/steps/address_step/order_metadata_field', form: form %>",
+          after: "organization\" %>\n    </div>"
       end
 
       def run_migrations

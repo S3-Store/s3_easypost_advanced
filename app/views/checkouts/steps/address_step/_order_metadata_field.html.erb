@@ -1,0 +1,4 @@
+<div class="text-input" style="display: none;">
+  <%= form.label :po_number, "#{I18n.t("spree.po_number")}:" %>
+  <%= form.text_field :customer_metadata, value: @order.customer_metadata["po_number"], name: "order[customer_metadata][po_number]" %>
+</div>
