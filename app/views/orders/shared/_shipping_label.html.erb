@@ -1,0 +1,5 @@
+<% if order.customer_metadata["inbound_label_url"].present? %>
+  <p>
+    <%= link_to t('spree.download_shipping_label'), order.customer_metadata["inbound_label_url"], target: '_blank' %>
+  </p>
+<% end %>

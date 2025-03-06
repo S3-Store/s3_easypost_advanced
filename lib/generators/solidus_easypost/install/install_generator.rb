@@ -6,6 +6,7 @@ module SolidusEasypost
       source_root File.expand_path('templates', __dir__)
 
       class_option :auto_run_migrations, type: :boolean, default: false
+      class_option :frontend, type: :string, default: 'starter'
 
       def copy_initializer
         template 'initializer.rb', 'config/initializers/solidus_easypost.rb'
@@ -17,6 +18,20 @@ module SolidusEasypost
 
       def add_javascripts
         empty_directory 'app/assets/javascripts'
+      end
+
+      def add_shipping_info
+        return if options[:frontend] != 'starter'
+
+        insert_into_file "app/views/orders/_order_shipments.html.erb",
+          "  <%= render 'orders/shared/shipping_label', order: order%> \n      ",
+          before: '</li>'
+        insert_into_file "app/views/cart_line_items/_product_submit.html.erb",
+          "  <%= render 'products/serial_number_label', product: product %> \n      ",
+          after: "<%= render 'cart_line_items/product_availability', product: product %>\n"
+        insert_into_file "app/views/checkouts/steps/delivery_step/_shipping_methods.html.erb",
+          "\n<%= render 'checkouts/steps/delivery_step/pickup_fields', form: form %>",
+          after: "</ul>"
       end
 
       def run_migrations

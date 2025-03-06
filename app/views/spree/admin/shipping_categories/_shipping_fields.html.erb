@@ -1,0 +1,22 @@
+
+<div data-hook="shipping_type" class="field align-center">
+  <%= f.label :shipping_type %><br>
+  <%= f.select :shipping_type,
+                 Spree::ShippingCategory.shipping_types.keys.map { |k| [t("spree.shipping_types.#{k}"), k] },
+                 { include_blank: false },
+                 class: 'custom-select ' %>
+</div>
+<div data-hook="label_creation" class="field align-center">
+  <%= f.label :label_creation %><br>
+  <%= f.select :label_creation,
+                 Spree::ShippingCategory.label_creations.keys.map { |k| [t("spree.label_creations.#{k}"), k] },
+                 { include_blank: false },
+                 class: 'custom-select ' %>
+</div>
+<div data-hook="carrier_platform" class="field align-center">
+  <%= f.label :carrier_platform %><br>
+  <%= f.select :carrier_platform,
+                 Spree::ShippingCategory.carrier_platforms.keys.map { |k| [t("spree.carrier_platforms.#{k}"), k] },
+                 { include_blank: false },
+                 class: 'custom-select ' %>
+</div>
