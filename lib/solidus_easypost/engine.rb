@@ -11,7 +11,7 @@ module SolidusEasypost
 
     engine_name 'solidus_easypost'
 
-    # use rspec for tests
+    # Use rspec for tests
     config.generators do |g|
       g.test_framework :rspec
     end
