@@ -1,0 +1,17 @@
+<% if form.object.trade_in_order? %>
+  <div class="radio-input flex gap-x-3 items-center last:mb-0">
+    <%= meta.label :payment_method, "#{I18n.t("spree.insert_payment_information")}:" %>
+    <%= meta.radio_button :payment_method, 'PayPal', checked: @order.customer_metadata["payment_method"] == 'PayPal' %> PayPal
+    <%= meta.radio_button :payment_method, 'Bank Transfer', checked: @order.customer_metadata["payment_method"] == 'Bank Transfer' %> Bank Transfer
+  </div>
+
+  <div class="text-input">
+    <%= meta.label :account_holder, "#{I18n.t("spree.account_holder")}:" %>
+    <%= meta.text_field :account_holder, value: @order.customer_metadata["account_holder"] %>
+  </div>
+
+  <div class="text-input">
+    <%= meta.label :payment_account, "#{I18n.t("spree.payment_account")}:" %>
+    <%= meta.text_field :payment_account, value: @order.customer_metadata["payment_account"] %>
+  </div>
+<% end %>

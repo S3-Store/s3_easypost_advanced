@@ -1,0 +1,6 @@
+<% if form.object.bill_address.company.present? || form.object.ship_address.company.present? %>
+  <div class="text-input">
+    <%= meta.label :po_number, "#{I18n.t('spree.po_number')}:", class: "block font-medium mb-1" %>
+    <%= meta.text_field :po_number, value: @order.customer_metadata["po_number"] %>
+  </div>
+<% end %>
