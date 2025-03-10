@@ -50,4 +50,16 @@ RSpec.describe Spree::Shipment do
       end
     end
   end
+
+  describe 'order#complete' do
+    context 'schedule_pick#false' do
+      it 'generate pcikup and labels' do
+        VCR.use_cassette('shipment/no_schedule_pickup') do
+          easypost_config_setup(purchase_labels: true)
+          expect(shipment.shipping_method.schedule_pickup).to be false
+          expect(order.customer_metadata['pickup_id']).to be_nil
+        end
+      end
+    end
+  end
 end
