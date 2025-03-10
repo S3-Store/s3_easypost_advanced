@@ -11,6 +11,11 @@ en:
     default_stock_location: "Default Location"
     return_stock_location: "Return Location"
     service_stock_location: "Service Location"
+    pickup_day: "Pickup Day"
+    pickup_time: "Pickup Time"
+    next_5_business_days: "Next 5 Business Days"
+    available_time_slots: "Available Time Slots"
+    schedule_pickup: "Schedule Pickup"
     product_types:
       standard: "Standard Product"
       service: "Service"
