@@ -16,6 +16,10 @@ en:
     next_5_business_days: "Next 5 Business Days"
     available_time_slots: "Available Time Slots"
     schedule_pickup: "Schedule Pickup"
+    trade_in_payment_info: "Trade-In Payment Information"
+    account_holder: "Account Holder"
+    payment_account: "Payment Account"
+    insert_payment_information: "Please specify how you want to get paid. Please note that you can communicate your choice later, but it may delay your Trade-In."
     product_types:
       standard: "Standard Product"
       service: "Service"

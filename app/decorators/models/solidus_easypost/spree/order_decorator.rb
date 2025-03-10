@@ -26,6 +26,11 @@ module Spree
       true
     end
 
+    def trade_in_order?
+      # Collect all products from the order's line items and check if any product is a trade-in.
+      line_items.any? { |li| li.variant.product.trade_in? }
+    end
+
     private
 
     def generate_labels
@@ -37,11 +42,6 @@ module Spree
       return unless trade_in_order?
 
       customer_metadata["order_type"] = 'Trade-In'
-    end
-
-    def trade_in_order?
-      # Collect all products from the order's line items and check if any product is a trade-in.
-      line_items.any? { |li| li.variant.product.trade_in? }
     end
   end
 end

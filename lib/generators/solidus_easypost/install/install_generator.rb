@@ -18,6 +18,8 @@ module SolidusEasypost
 
       def add_javascripts
         empty_directory 'app/assets/javascripts'
+        template 'payment_info_toggle.js', 'app/assets/javascripts/payment_info_toggle.js'
+        append_file 'app/assets/javascripts/solidus_starter_frontend.js', "//= require payment_info_toggle\n"
       end
 
       def add_shipping_info
