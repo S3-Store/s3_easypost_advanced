@@ -84,16 +84,22 @@ module SolidusEasypost
         purchased_shipment = SolidusEasypost.client.shipment.buy(inbound_shipment.id, rate: { id: rate.id })
 
         # Create pickup using extracted methods
-        pickup_details = create_easypost_pickup(purchased_shipment, from_address)
+        pickup_details = create_easypost_pickup(purchased_shipment, from_address) if customer_metadata['pickup_day'].present?
+        purchased_pickup_details = buy_easypost_pickup(pickup_details)
 
         order.update!(
           customer_metadata: (order.customer_metadata || {}).merge(
-            inbound_label_url: purchased_shipment.postage_label.label_url,
-            pickup_id: pickup_details[:pickup].id,
-            pickup_status: pickup_details[:pickup].status,
-            pickup_min_datetime: pickup_details[:min_datetime],
-            pickup_max_datetime: pickup_details[:max_datetime]
-          )
+            inbound_label_url: purchased_shipment.postage_label.label_url
+          ).tap do |metadata|
+            if pickup_details.present?
+              metadata.merge!(
+                pickup_id: purchased_pickup_details.id,
+                pickup_status: purchased_pickup_details.status,
+                pickup_min_datetime: pickup_details[:min_datetime],
+                pickup_max_datetime: pickup_details[:max_datetime]
+              )
+            end
+          end
         )
       rescue StandardError => e
         Rails.logger.error "Failed to generate inbound label or create pickup: #{e.message}"
@@ -147,6 +153,40 @@ module SolidusEasypost
           min_datetime: min_datetime,
           max_datetime: max_datetime
         }
+      end
+
+      def buy_easypost_pickup(pickup_details)
+        pickup = pickup_details[:pickup]
+        return log_and_return("Pickup details are missing") unless pickup
+
+        cheapest_rate = find_cheapest_rate(pickup.pickup_rates)
+        return log_and_return("No valid pickup rates found") unless cheapest_rate
+
+        carrier = cheapest_rate["carrier"]
+        service = cheapest_rate["service"]
+        return log_and_return("Carrier or service is missing") unless carrier && service
+
+        process_pickup_purchase(pickup.id, carrier, service)
+      rescue => e
+        Rails.logger.error "Error in buy_easypost_pickup: #{e.message}"
+        nil
+      end
+
+      def find_cheapest_rate(pickup_rates)
+        return nil if pickup_rates.empty?
+
+        pickup_rates.min_by { |rate| rate["rate"].to_f }
+      end
+
+      def process_pickup_purchase(pickup_id, carrier, service)
+        SolidusEasypost.client.pickup.buy(pickup_id, carrier: carrier, service: service)
+      rescue => e
+        Rails.logger.error "Failed to buy pickup: #{e.message}"
+        nil
+      end
+
+      def log_and_return(message)
+        Rails.logger.warn(message)
       end
 
       def build_pickup_datetimes(pickup_day, start_time_str, end_time_str)
