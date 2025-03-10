@@ -29,9 +29,9 @@ module SolidusEasypost
         insert_into_file "app/views/cart_line_items/_product_submit.html.erb",
           "  <%= render 'products/serial_number_label', product: product %> \n      ",
           after: "<%= render 'cart_line_items/product_availability', product: product %>\n"
-        insert_into_file "app/views/checkouts/steps/delivery_step/_shipping_methods.html.erb",
-          "\n<%= render 'checkouts/steps/delivery_step/pickup_fields', form: form %>",
-          after: "</ul>"
+        insert_into_file "app/views/checkouts/steps/delivery_step/_proposed_shipment.erb",
+          "\n  <%= render 'checkouts/steps/delivery_step/pickup_fields', form: ship_form %>\n",
+          after: "\n  </div>\n"
       end
 
       def run_migrations
