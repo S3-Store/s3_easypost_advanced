@@ -1,0 +1,38 @@
+<div data-hook="admin_shipping_method_form_availability_fields">
+  <fieldset class="categories no-border-bottom">
+    <legend align="center"><%= t("spree.broker_configuration") %></legend>
+    <div>
+      <%= f.field_container :broker do %>
+        <%= f.label :broker %><br>
+        <%= f.select :broker,
+                     Spree::ShippingMethod.brokers.keys.map { |k| [t("spree.brokers.#{k}"), k] },
+                     { include_blank: false },
+                     class: 'custom-select' %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.field_container :carrier do %>
+        <%= f.label :carrier %>
+        <%= f.text_field :carrier, class: 'fullwidth', label: false %>
+        <%= error_message_on :shipping_method, :carrier %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.field_container :carrier_id do %>
+        <%= f.label :carrier_id, t("spree.carrier_id") %><br>
+        <%= f.text_field :carrier_id, class: 'fullwidth', label: false %>
+        <%= error_message_on :shipping_method, :carrier_id %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= f.field_container :service_level do %>
+        <%= f.label :service_level %>
+        <%= f.text_field :service_level, class: 'fullwidth', label: false %>
+        <%= error_message_on :shipping_method, :service_level %>
+      <% end %>
+    </div>
+  </fieldset>
+</div>
