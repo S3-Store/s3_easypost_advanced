@@ -3,15 +3,11 @@
 module SolidusEasypost
   class ShippingMethodSelector
     def shipping_method_for(rate)
-      ::Spree::ShippingMethod.find_or_create_by(
+      ::Spree::ShippingMethod.find_by(
         carrier: rate.carrier,
         service_level: rate.service,
-      ) do |shipping_method|
-        shipping_method.name = "#{rate.carrier} #{rate.service}"
-        shipping_method.calculator = ::Spree::Calculator::Shipping::FlatRate.create
-        shipping_method.shipping_categories = [::Spree::ShippingCategory.first]
-        shipping_method.available_to_users = false
-      end
+        carrier_id: rate.carrier_account_id
+      )
     end
   end
 end
