@@ -9,7 +9,8 @@ module SolidusEasypost
           to_address: AddressBuilder.from_address(package.order.ship_address, to_address || {}),
           from_address: AddressBuilder.from_stock_location(package.stock_location, from_address || {}),
           parcel: ParcelBuilder.from_package(package),
-          options: options
+          carrier_accounts: package.shipment.carrier_accounts,
+          options:
         )
       end
 
