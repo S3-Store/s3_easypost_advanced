@@ -1,0 +1,7 @@
+<%= f.field_container :use_default_shipping_calculator, class: %w(checkbox) do %>
+  <label>
+    <%= f.check_box(:use_default_shipping_calculator) %>
+    <%= Spree::ShippingMethod.human_attribute_name :use_default_shipping_calculator %>
+  </label>
+  <%= error_message_on :shipping_method, :use_default_shipping_calculator %>
+<% end %>
