@@ -47,6 +47,10 @@ module SolidusEasypost
         buy_easypost_rate
       end
 
+      def carrier_accounts
+        self.shipping_methods.pluck(:carrier_id).compact
+      end
+
       private
 
       def buy_easypost_rate
