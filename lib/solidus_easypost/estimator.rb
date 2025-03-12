@@ -15,7 +15,8 @@ module SolidusEasypost
 
     def build_shipping_rate(rate)
       shipping_method = shipping_method_selector.shipping_method_for(rate)
-      return unless shipping_method.available_to_users?
+
+      return unless shipping_method && shipping_method.available_to_users?
 
       ::Spree::ShippingRate.new(
         name: "#{rate.carrier} #{rate.service}",

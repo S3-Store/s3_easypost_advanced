@@ -47,6 +47,10 @@ module SolidusEasypost
         buy_easypost_rate
       end
 
+      def carrier_accounts
+        self.shipping_methods.pluck(:carrier_id).compact
+      end
+
       private
 
       def buy_easypost_rate
@@ -84,16 +88,21 @@ module SolidusEasypost
         purchased_shipment = SolidusEasypost.client.shipment.buy(inbound_shipment.id, rate: { id: rate.id })
 
         # Create pickup using extracted methods
-        pickup_details = create_easypost_pickup(purchased_shipment, from_address)
+        pickup_details = create_easypost_pickup(purchased_shipment, from_address) if customer_metadata['pickup_day'].present?
 
         order.update!(
           customer_metadata: (order.customer_metadata || {}).merge(
-            inbound_label_url: purchased_shipment.postage_label.label_url,
-            pickup_id: pickup_details[:pickup].id,
-            pickup_status: pickup_details[:pickup].status,
-            pickup_min_datetime: pickup_details[:min_datetime],
-            pickup_max_datetime: pickup_details[:max_datetime]
-          )
+            inbound_label_url: purchased_shipment.postage_label.label_url
+          ).tap do |metadata|
+            if pickup_details.present?
+              metadata.merge!(
+                pickup_id: pickup_details[:pickup].id,
+                pickup_status: pickup_details[:pickup].status,
+                pickup_min_datetime: pickup_details[:min_datetime],
+                pickup_max_datetime: pickup_details[:max_datetime]
+              )
+            end
+          end
         )
       rescue StandardError => e
         Rails.logger.error "Failed to generate inbound label or create pickup: #{e.message}"

@@ -11,6 +11,8 @@ en:
     default_stock_location: "Default Location"
     return_stock_location: "Return Location"
     service_stock_location: "Service Location"
+    carrier_id: "Carrier ID"
+    broker_configuration: "Broker Configuration"
     product_types:
       standard: "Standard Product"
       service: "Service"
