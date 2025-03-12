@@ -5,7 +5,7 @@ module SolidusEasypost
     def shipping_rates(package, _frontend_only = true)
       easypost_rates = ShipmentBuilder.from_package(package).rates.sort_by(&:rate)
 
-      shipping_rates = easypost_rates.map { |rate| build_shipping_rate(rate) }.compact
+      shipping_rates = easypost_rates.filter_map { |rate| build_shipping_rate(package, rate) }
       shipping_rates.min_by(&:cost)&.selected = true
 
       shipping_rates
@@ -13,16 +13,16 @@ module SolidusEasypost
 
     private
 
-    def build_shipping_rate(rate)
+    def build_shipping_rate(package, rate)
       shipping_method = shipping_method_selector.shipping_method_for(rate)
       return unless shipping_method.available_to_users?
 
       ::Spree::ShippingRate.new(
         name: "#{rate.carrier} #{rate.service}",
-        cost: shipping_rate_calculator.compute(rate),
+        cost: shipping_rate_calculator.compute(package, rate, shipping_method),
         easy_post_shipment_id: rate.shipment_id,
         easy_post_rate_id: rate.id,
-        shipping_method: shipping_method,
+        shipping_method: shipping_method
       )
     end
 
