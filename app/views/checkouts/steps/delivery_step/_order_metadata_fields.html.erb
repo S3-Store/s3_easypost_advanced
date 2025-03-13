@@ -1,5 +1,6 @@
-  <%= form_with model: @order, local: true do |form| %>
-    <%= form.fields_for :customer_metadata, @order.customer_metadata || {}, builder: ActionView::Helpers::FormBuilder do |meta| %>
-        <%= render 'checkouts/steps/delivery_step/shared/payment_info_fields', form: form, meta: meta %>
-    <% end %>
+<%= form_with model: @order, local: true do |form| %>
+  <%= form.fields_for :customer_metadata, @order.customer_metadata || {}, builder: ActionView::Helpers::FormBuilder do |meta| %>
+    <%= render 'checkouts/steps/delivery_step/shared/payment_info_fields', form: form, meta: meta %>
+    <%= render 'checkouts/steps/delivery_step/shared/customer_reference_field', form: form, meta: meta %>
   <% end %>
+<% end %>

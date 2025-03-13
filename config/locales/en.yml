@@ -20,6 +20,8 @@ en:
     account_holder: "Account Holder"
     payment_account: "Payment Account"
     insert_payment_information: "Please specify how you want to get paid. Please note that you can communicate your choice later, but it may delay your Trade-In."
+    reference_number: "Reference Number"
+    customer_reference: "Your Reference (PO-Number, Asset Number,…)"
     product_types:
       standard: "Standard Product"
       service: "Service"
