@@ -9,6 +9,7 @@ module SolidusEasypost
           to_address: AddressBuilder.from_address(package.order.ship_address, to_address || {}),
           from_address: AddressBuilder.from_stock_location(package.stock_location, from_address || {}),
           parcel: ParcelBuilder.from_package(package),
+          reference: build_reference(package),
           options: options
         )
       end
@@ -38,6 +39,13 @@ module SolidusEasypost
         from_address = options.delete(:from_address_options)
         to_address = options.delete(:to_address_options)
         [from_address, to_address]
+      end
+
+      def build_reference(package)
+        reference = package.order.number
+        customer_reference = package.order.customer_metadata['customer_reference']
+        reference += " #{customer_reference}" if customer_reference.present?
+        reference
       end
     end
   end
