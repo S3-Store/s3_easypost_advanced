@@ -20,6 +20,8 @@ module SolidusEasypost
       unless SolidusSupport::LegacyEventCompat.using_legacy?
         app.reloader.to_prepare do
           ::Spree::Bus.register(:'solidus_easypost.tracker.updated')
+          ::Spree::Bus.register(:'solidus_easypost.shipment_tracker.updated')
+          SolidusEasypost::StatusTracker.new.subscribe_to(::Spree::Bus)
         end
       end
     end
