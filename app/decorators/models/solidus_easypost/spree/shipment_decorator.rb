@@ -26,6 +26,32 @@ module SolidusEasypost
           prefix: :selected,
           allow_nil: true,
         )
+
+        base.state_machine do
+          state :inbound_ready
+          state :inbound_shipped
+          state :complete
+
+          event :ship do
+            transition from: [:ready, :canceled, :pending, :inbound_ready, :inbound_shipped], to: :shipped
+          end
+
+          event :inbound_ready do
+            transition from: :pending, to: :inbound_ready
+          end
+
+          event :inbound_ship do
+            transition from: :inbound_ready, to: :inbound_shipped
+          end
+
+          event :pending do
+            transition from: :inbound_shipped, to: :pending
+          end
+
+          event :complete do
+            transition from: [:shipped, :inbound_shipped], to: :complete
+          end
+        end
       end
 
       def easypost_shipment
@@ -100,6 +126,9 @@ module SolidusEasypost
             end
           end
         )
+
+        update!(easy_post_inbound_tracker_id: purchased_shipment.tracker.id)
+        inbound_ready! if easy_post_inbound_tracker_id.present?
       rescue StandardError => e
         Rails.logger.error "Failed to generate inbound label or create pickup: #{e.message}"
         raise e
@@ -123,6 +152,8 @@ module SolidusEasypost
         order.update!(admin_metadata: order.admin_metadata.merge(
           return_label_url: return_label.postage_label.label_url
         ))
+
+        update!(easy_post_tracker_id: return_label.tracker.id)
       rescue StandardError => e
         Rails.logger.error "Failed to generate return label: #{e.message}"
       end
