@@ -1,5 +1,9 @@
 en:
   spree:
+    shipment_states:
+      inbound_shipped: 'Inbound Shipped'
+      inbound_ready: 'Inbound Ready'
+      complete: 'Complete'
     postage_label: 'Postage Label'
     download_shipping_label: 'Download your Shipping Label'
     open_postage_label: 'Open'
