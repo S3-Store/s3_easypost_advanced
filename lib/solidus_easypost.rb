@@ -17,6 +17,8 @@ require 'solidus_easypost/shipping_method_selector'
 require 'solidus_easypost/calculator/base_dimension_calculator'
 require 'solidus_easypost/calculator/weight_dimension_calculator'
 require 'solidus_easypost/tracker_webhook_handler'
+require 'solidus_easypost/shipment_state_handler'
+
 require 'solidus_easypost/errors/unknown_partial_resource_error'
 
 module SolidusEasypost
